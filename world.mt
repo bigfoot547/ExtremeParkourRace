@@ -1,0 +1,15 @@
+gameid = minetest
+backend = sqlite3
+creative_mode = false
+enable_damage = true
+load_mod_adv_respawn = true
+load_mod_maptools = true
+load_mod_morecommands = true
+load_mod_void = true
+load_mod_worldedit = true
+load_mod_worldedit_commands = true
+load_mod_worldedit_gui = true
+load_mod_worldedit_infinity = true
+load_mod_worldedit_limited = true
+load_mod_worldedit_shortcommands = true
+load_mod_bakedclay = true
