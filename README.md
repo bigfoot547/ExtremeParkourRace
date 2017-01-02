@@ -10,3 +10,5 @@ Version: 0.4.15 stable<br>
   * [morecommands mod](https://forum.minetest.net/viewtopic.php?t=15452)
   * [maptools mod](https://forum.minetest.net/viewtopic.php?t=1882)
   * [bakedclay mod](https://forum.minetest.net/viewtopic.php?t=8890)
+
+**WARNING**: Please do _not_ use any sprinting mods. This map handles sprinting itself.
