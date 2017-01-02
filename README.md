@@ -6,4 +6,7 @@ Deaths: 53<br>
 
 ## Dependancies
 Version: 0.4.15 stable<br>
-_incomplete_
+
+  * [morecommands mod](https://forum.minetest.net/viewtopic.php?t=15452)
+  * [maptools mod](https://forum.minetest.net/viewtopic.php?t=1882)
+  * [bakedclay mod](https://forum.minetest.net/viewtopic.php?t=8890)
