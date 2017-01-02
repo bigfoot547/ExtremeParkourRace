@@ -63,19 +63,3 @@ minetest.register_on_placenode(function(pos, newnode, placer, oldnode, itemstack
 		return true
 	end
 end)
-
-minetest.register_privilege("respawn", {description = "Can insta-respawn"})
-
-minetest.register_chatcommand("respawn", {
-	description = "Instantly respawn",
-	params = "",
-	privs = {respawn = true},
-	func = function(name, param)
-		if respawning_players[name] then
-			respawning_players[name] = 0
-			return true -- No message, Line 35 handles it.
-		else
-			return false, "You are not respawning"
-		end
-	end
-})
