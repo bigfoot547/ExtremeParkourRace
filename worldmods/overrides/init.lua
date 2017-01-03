@@ -255,6 +255,7 @@ minetest.register_on_dieplayer(function(player)
 end)
 
 minetest.override_item("default:stick", {
+	inventory_image = "checkpoint.png",
 	on_drop = function(item, dropper, pos)
 		if dropper:get_hp() == 0 or respawning_players[dropper:get_player_name()] then return end
 		dropper:set_hp(0)
@@ -263,6 +264,8 @@ minetest.override_item("default:stick", {
 })
 
 minetest.override_item("wool:red", {
+	inventory_image = "shift_disable.png",
+	wield_image = "shift_disable.png",
 	description = "Sneaking "..minetest.colorize("#FF0000", "Disabled"),
 	on_drop = function(itemstack, dropper, pos)
 		sneak_enabled = true
@@ -275,6 +278,8 @@ minetest.override_item("wool:red", {
 })
 
 minetest.override_item("wool:green", {
+	inventory_image = "shift_enable.png",
+	wield_image = "shift_enable.png",
 	description = "Sneaking "..minetest.colorize("#007F00", "Enabled"),
 	on_drop = function(itemstack, dropper, pos)
 		sneak_enabled = false
@@ -287,6 +292,8 @@ minetest.override_item("wool:green", {
 })
 
 minetest.override_item("wool:orange", {
+	inventory_image = "shift_glitch_disable.png",
+	wield_image = "shift_glitch_disable.png",
 	description = "Sneak Glitch "..minetest.colorize("#FF0000", "Disabled"),
 	tiles = {"wool_red.png"},
 	on_drop = function(itemstack, dropper, pos)
@@ -300,6 +307,8 @@ minetest.override_item("wool:orange", {
 })
 
 minetest.override_item("wool:yellow", {
+	inventory_image = "shift_glitch_enable.png",
+	wield_image = "shift_glitch_enable.png",
 	description = "Sneak Glitch "..minetest.colorize("#007F00", "Enabled"),
 	tiles = {"wool_green.png"},
 	on_drop = function(itemstack, dropper, pos)
