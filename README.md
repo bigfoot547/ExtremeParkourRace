@@ -4,7 +4,7 @@ If you have no one to race, here are my times:<br>
 Time: 13 minutes, 40 seconds<br>
 Deaths: 53<br>
 
-## Dependancies
+## Dependencies
 Version: 0.4.15 stable<br>
 
   * [morecommands mod](https://forum.minetest.net/viewtopic.php?t=15452)
