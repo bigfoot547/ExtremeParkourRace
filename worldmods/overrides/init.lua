@@ -1,5 +1,17 @@
-sneak_enabled = true
-sneak_glitch_enabled = false
+local sneak_enabled = true
+local sneak_glitch_enabled = false
+
+local parkour_timer = {} -- {"name" = minetest.get_gametime()}
+local death_count = {}
+
+local function time_format(seconds)
+	local seconds = math.floor(seconds)
+	local sec_str = tostring(seconds % 60)
+	if string.len(sec_str) == 1 then
+		sec_str = "0" .. sec_str
+	end
+	return tostring(math.floor(seconds / 60)) .. ":" .. sec_str
+end
 
 minetest.override_item("bakedclay:dark_grey", {
 	sunlight_propogates = true,
@@ -165,6 +177,8 @@ minetest.register_globalstep(function(dtime)
 						p:setpos(level[i] or {x = 0, y = -0.5, z = 0})
 						if i == 1 then
 							minetest.chat_send_all(name .. " left the hub and is now on level 1.")
+							parkour_timer[name] = minetest.get_gametime()
+							death_count[name] = 0
 							minetest.setting_set("void_height", "-1")
 							minetest.setting_set("void_dmg_pause", "0.25")
 							minetest.setting_set("time_speed", "0")
@@ -176,7 +190,12 @@ minetest.register_globalstep(function(dtime)
 							minetest.set_timeofday(0.5)
 							minetest.chat_send_player(name, "Welcome to level " .. tostring(i) .. ": \"" .. level_names[i] .. "\".")
 						elseif i == 11 then
-							minetest.chat_send_all(name .. " finished the map!")
+							local gt = minetest.get_gametime()
+							if parkour_timer[name] and death_count[name] then
+								minetest.chat_send_all(name .. " finished the map in " .. time_format(minetest.get_gametime() - parkour_timer[name]) .. " and " .. tostring(death_count[name]) .. " deaths.")
+							else
+								minetest.chat_send_all(name .. " finished the map in [unknown] and [unknown] deaths.")
+							end
 						else
 							minetest.chat_send_all(name .. " finished level " .. tostring(i - 1) .. " and is now on level " .. tostring(i) .. ".")
 							minetest.chat_send_player(name, "Welcome to level " .. tostring(i) .. ": \"" .. level_names[i] .. "\".")
@@ -245,6 +264,7 @@ minetest.register_chatcommand("restart", {
 		minetest.chat_send_all(name .. " restarted the map. Teleporting...")
 		for _, p in pairs(minetest.get_connected_players()) do
 			p:setpos({x = 0, y = 0, z = 0})
+			beds.spawn[p:get_player_name()] = {x = 0, y = 0, z = 0}
 		end
 		minetest.chat_send_all("Teleported all.")
 	end
@@ -252,6 +272,12 @@ minetest.register_chatcommand("restart", {
 
 minetest.register_on_dieplayer(function(player)
 	minetest.sound_play("player_damage", {to_player = player:get_player_name(), gain = 100.0})
+	local name = player:get_player_name()
+	if death_count[name] then
+		death_count[name] = death_count[name] + 1
+	else
+		death_count[name] = 0
+	end
 end)
 
 minetest.override_item("default:stick", {
