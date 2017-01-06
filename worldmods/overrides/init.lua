@@ -1,5 +1,6 @@
 local sneak_enabled = true
 local sneak_glitch_enabled = false
+rtimer_enabled = true
 
 local parkour_timer = {} -- {"name" = minetest.get_gametime()}
 local death_count = {}
@@ -78,6 +79,10 @@ local function get_wool(oper, bool)
 		return "wool:yellow"
 	elseif oper == 1 and not bool then
 		return "wool:orange"
+	elseif oper == 2 and bool then
+		return "wool:violet"
+	elseif oper == 2 and not bool then
+		return "wool:cyan"
 	end
 end
 
@@ -150,7 +155,7 @@ minetest.register_globalstep(function(dtime)
 				if minetest.setting_getbool("creative_mode") then
 					inv:set_list("main", {"default:stick", "default:pick_diamond", "default:sign_wall_steel", "bakedclay:red", "bakedclay:orange", "bakedclay:yellow", "bakedclay:green", "bakedclay:dark_green", "bakedclay:blue", "bakedclay:cyan", "bakedclay:violet", "bakedclay:dark_grey", "bakedclay:brown", "bakedclay:black"})
 				else
-					inv:set_list("main", {"default:stick", get_wool(0, sneak_enabled), get_wool(1, sneak_glitch_enabled)})
+					inv:set_list("main", {"default:stick", get_wool(0, sneak_enabled), get_wool(1, sneak_glitch_enabled), get_wool(2, rtimer_enabled)})
 				end
 			else
 				inv:set_list("main", {"default:stick"})
@@ -229,7 +234,7 @@ minetest.register_globalstep(function(dtime)
 				if minetest.setting_getbool("creative_mode") then
 					p:hud_set_hotbar_itemcount(14)
 				else
-					p:hud_set_hotbar_itemcount(3)
+					p:hud_set_hotbar_itemcount(4)
 				end
 			else
 				p:hud_set_hotbar_itemcount(1)
@@ -286,7 +291,7 @@ minetest.override_item("default:stick", {
 		if dropper:get_hp() == 0 or respawning_players[dropper:get_player_name()] then return end
 		dropper:set_hp(0)
 	end,
-	description = "Press "..minetest.colorize("#FBFB00", "Q").." to Restart"
+	description = minetest.colorize("#FBFB00", "Throw") .. " to Restart"
 })
 
 minetest.override_item("wool:red", {
@@ -340,6 +345,36 @@ minetest.override_item("wool:yellow", {
 	on_drop = function(itemstack, dropper, pos)
 		sneak_glitch_enabled = false
 		minetest.chat_send_all(dropper:get_player_name() .. minetest.colorize("#FF0000", " DISABLED") .. " sneak glitch.")
+	end,
+	on_place = function(itemstack, placer, pointed_thing)
+		local pos = pointed_thing.above
+		minetest.set_node(pos, {name = "air"})
+	end
+})
+
+minetest.override_item("wool:violet", {
+	inventory_image = "rtimer_enable.png",
+	wield_image = "rtimer_enable.png",
+	description = "Respawn Timer "..minetest.colorize("#007F00", "Enabled"),
+	tiles = {"wool_green.png"},
+	on_drop = function(itemstack, dropper, pos)
+		rtimer_enabled = false
+		minetest.chat_send_all(dropper:get_player_name() .. minetest.colorize("#FF0000", " DISABLED") .. " respawn timer.")
+	end,
+	on_place = function(itemstack, placer, pointed_thing)
+		local pos = pointed_thing.above
+		minetest.set_node(pos, {name = "air"})
+	end
+})
+
+minetest.override_item("wool:cyan", {
+	inventory_image = "rtimer_disable.png",
+	wield_image = "rtimer_disable.png",
+	description = "Respawn Timer "..minetest.colorize("#FF0000", "Disabled"),
+	tiles = {"wool_red.png"},
+	on_drop = function(itemstack, dropper, pos)
+		rtimer_enabled = true
+		minetest.chat_send_all(dropper:get_player_name() .. minetest.colorize("#00FF00", " ENABLED") .. " respawn timer.")
 	end,
 	on_place = function(itemstack, placer, pointed_thing)
 		local pos = pointed_thing.above
